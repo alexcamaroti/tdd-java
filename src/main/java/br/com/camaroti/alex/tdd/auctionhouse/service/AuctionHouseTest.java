@@ -1,26 +1,55 @@
 package br.com.camaroti.alex.tdd.auctionhouse.service;
 
 import static org.junit.Assert.assertEquals;
+
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import br.com.camaroti.alex.tdd.auctionhouse.builder.AuctionHouseFactory;
 import br.com.camaroti.alex.tdd.auctionhouse.model.Appraiser;
-import br.com.camaroti.alex.tdd.auctionhouse.model.Bid;
 import br.com.camaroti.alex.tdd.auctionhouse.model.User;
 
 public class AuctionHouseTest {
+	
+	private Appraiser appraiser;
+	private User jose;
+	private User john;
+	private User mariah;
+	private User alex;
+	private User claudete;
+	private User cayley;
+
+	@Before
+	public void setUp() {
+		this.appraiser = new Appraiser();
+		this.jose = new User("2", "José");
+		this.john = new User("1", "John");
+		this.mariah = new User("3", "Mariah");
+		this.alex = new User("4", "Alex");
+		this.claudete = new User("5", "Claudete");
+		this.cayley = new User("6", "Cayley");
+	}
+	
+	@BeforeClass
+	public static void testandoBeforeClass() {
+	  System.out.println("before class");
+	}
+
+	@AfterClass
+	public static void testandoAfterClass() {
+	  System.out.println("after class");
+	}
 
 	@Test
 	public void verifyBiggestLowestAverageBid() {
-		User john = new User("1", "John");
-		User jose = new User("2", "José");
-		User mariah = new User("3", "Mariah");
+		AuctionHouse auctionhouse = new AuctionHouseFactory().createAuction("Playstation 4")
+				.offer(john, 250.0)
+				.offer(jose, 300.0)
+				.offer(mariah, 400.0)
+				.build();
 
-		AuctionHouse auctionhouse = new AuctionHouse("Playstation 4");
-
-		auctionhouse.offer(new Bid(john, 250.0));
-		auctionhouse.offer(new Bid(jose, 300.0));
-		auctionhouse.offer(new Bid(mariah, 400.0));
-
-		Appraiser appraiser = new Appraiser();
 		appraiser.evaluate(auctionhouse);
 
 		Double biggestExpected = 400d;
@@ -30,18 +59,16 @@ public class AuctionHouseTest {
 		assertEquals(biggestExpected, appraiser.getBiggestBid());
 		assertEquals(lowestExpected, appraiser.getLowestBid());
 		assertEquals(averageExpected, appraiser.getAverageBid(), 0.01);
-		System.out.println(appraiser.getLowestBid());
 
 	}
 
 	@Test
 	public void verifyAuctionHouseJustOneBid() {
-		User john = new User("1", "John");
+		AuctionHouse auctionhouse = new AuctionHouseFactory()
+				.createAuction("Playstation 3 Novo")
+				.offer(john, 800.0)
+				.build();
 
-		AuctionHouse auctionhouse = new AuctionHouse("Playstation 3 Novo");
-		auctionhouse.offer(new Bid(john, 800.0));
-
-		Appraiser appraiser = new Appraiser();
 		appraiser.evaluate(auctionhouse);
 
 		assertEquals(800.0, appraiser.getBiggestBid(), 0.000001);
@@ -52,19 +79,14 @@ public class AuctionHouseTest {
 
 	@Test
 	public void verifyBiggerThreeBids() {
-		User john = new User("1", "John");
-		User jose = new User("2", "José");
-		User mariah = new User("3", "Mariah");
-		User alex = new User("4", "Alex");
+		AuctionHouse auctionhouse = new AuctionHouseFactory()
+				.createAuction("Playstation 4 Novo")
+				.offer(john, 1500.0)
+				.offer(jose, 1600.0)
+				.offer(mariah, 1700.0)
+				.offer(alex, 1850.0)
+				.build();
 
-		AuctionHouse auctionhouse = new AuctionHouse("Playstation 4 Novo");
-
-		auctionhouse.offer(new Bid(john, 1500.0));
-		auctionhouse.offer(new Bid(jose, 1600.0));
-		auctionhouse.offer(new Bid(mariah, 1700.0));
-		auctionhouse.offer(new Bid(alex, 1850.0));
-
-		Appraiser appraiser = new Appraiser();
 		appraiser.evaluate(auctionhouse);
 
 		assertEquals(3, appraiser.getBiggerThreeBids().size());
@@ -77,23 +99,16 @@ public class AuctionHouseTest {
 
 	@Test
 	public void verifyAuctionHouseBidsRandomnly() {
-		User john = new User("1", "John");
-		User jose = new User("2", "José");
-		User mariah = new User("3", "Mariah");
-		User alex = new User("4", "Alex");
-		User claudete = new User("5", "Claudete");
-		User cayley = new User("6", "Cayley");
+		AuctionHouse auctionhouse = new AuctionHouseFactory()
+				.createAuction("Playstation 4 Novo")
+				.offer(john, 200.0)
+				.offer(jose, 450.0)
+				.offer(mariah, 120.0)
+				.offer(alex, 700.0)
+				.offer(claudete, 630.0)
+				.offer(cayley, 230.0)
+				.build();
 
-		AuctionHouse auctionhouse = new AuctionHouse("Playstation 4 Novo");
-
-		auctionhouse.offer(new Bid(john, 200.0));
-		auctionhouse.offer(new Bid(jose, 450.0));
-		auctionhouse.offer(new Bid(mariah, 120.0));
-		auctionhouse.offer(new Bid(alex, 700.0));
-		auctionhouse.offer(new Bid(claudete, 630.0));
-		auctionhouse.offer(new Bid(cayley, 230.0));
-
-		Appraiser appraiser = new Appraiser();
 		appraiser.evaluate(auctionhouse);
 
 		assertEquals(700.0, appraiser.getBiggestBid(), 0.00001);
@@ -103,19 +118,14 @@ public class AuctionHouseTest {
 
 	@Test
 	public void verifyBidsDescendingOrder() {
-		User john = new User("1", "John");
-		User jose = new User("2", "José");
-		User mariah = new User("3", "Mariah");
-		User alex = new User("4", "Alex");
+		AuctionHouse auctionhouse = new AuctionHouseFactory()
+				.createAuction("World of Warcraft: Battle for Azeroth Deluxe Edition")
+				.offer(john, 400.0)
+				.offer(jose, 300.0)
+				.offer(mariah, 200.0)
+				.offer(alex, 100.0)
+				.build();
 
-		AuctionHouse auctionhouse = new AuctionHouse("World of Warcraft: Battle for Azeroth Deluxe Edition");
-
-		auctionhouse.offer(new Bid(john, 400.0));
-		auctionhouse.offer(new Bid(jose, 300.0));
-		auctionhouse.offer(new Bid(mariah, 200.0));
-		auctionhouse.offer(new Bid(alex, 100.0));
-
-		Appraiser appraiser = new Appraiser();
 		appraiser.evaluate(auctionhouse);
 
 		assertEquals(400.0, appraiser.getBiggerBids().get(0).getValue(), 0.00001);
@@ -128,13 +138,11 @@ public class AuctionHouseTest {
 
 	}
 
-	@Test
+	@Test(expected=RuntimeException.class)
 	public void verifyEmptyOffer() {
 		AuctionHouse auctionhouse = new AuctionHouse("World of Warcraft: Battle for Azeroth Deluxe Edition");
-		Appraiser appraiser = new Appraiser();
 		appraiser.evaluate(auctionhouse);
 
-		assertEquals(0, appraiser.getBiggerThreeBids().size());
 	}
 
 }

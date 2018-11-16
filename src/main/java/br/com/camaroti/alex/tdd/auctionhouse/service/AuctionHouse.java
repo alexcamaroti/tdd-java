@@ -18,7 +18,7 @@ public class AuctionHouse {
 	
 	
 	
-	public void offer(Bid bid) {
+	public void offer(Bid bid) {		
 		if(this.bids.isEmpty() || canBid(bid.getUser())) {
 			bids.add(bid);	
 		}

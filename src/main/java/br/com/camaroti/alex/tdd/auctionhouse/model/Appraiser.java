@@ -18,6 +18,10 @@ public class Appraiser {
 	
 	public void evaluate(AuctionHouse auctionhouse) {
 		
+		if(auctionhouse.getBids().size() == 0) {
+			throw new RuntimeException("Auction House can't be created without bids.");
+		}
+		
 		for (Bid bid : auctionhouse.getBids()) {
 			if (bid.getValue() > biggestBid) {
 				biggestBid = bid.getValue();

@@ -1,14 +1,20 @@
 package br.com.camaroti.alex.tdd.auctionhouse.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
-@RequiredArgsConstructor
+
 public @Data class Bid {
 	
 	private User user;
-	@NonNull private Double value;
+	private double value;
+	
+	public Bid(User user, double value) {
+		if(this.value <= 0) {
+			throw new IllegalArgumentException("You can't offer nothing or a negative value.");
+		}
+		this.user = user;
+		this.value = value;
+	}
+	
+	
 }
