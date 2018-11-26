@@ -10,8 +10,9 @@ import org.junit.Test;
 import br.com.camaroti.alex.tdd.auctionhouse.builder.AuctionHouseFactory;
 import br.com.camaroti.alex.tdd.auctionhouse.model.Appraiser;
 import br.com.camaroti.alex.tdd.auctionhouse.model.User;
+import br.com.camaroti.alex.tdd.auctionhouse.service.AuctionHouse;
 
-public class AuctionHouseTest {
+public class AuctionHouseV2Test {
 	
 	private Appraiser appraiser;
 	private User jose;
@@ -24,12 +25,12 @@ public class AuctionHouseTest {
 	@Before
 	public void setUp() {
 		this.appraiser = new Appraiser();
-		this.jose = new User("2", "José");
-		this.john = new User("1", "John");
-		this.mariah = new User("3", "Mariah");
-		this.alex = new User("4", "Alex");
-		this.claudete = new User("5", "Claudete");
-		this.cayley = new User("6", "Cayley");
+		this.jose = new User(2, "José");
+		this.john = new User(1, "John");
+		this.mariah = new User(3, "Mariah");
+		this.alex = new User(4, "Alex");
+		this.claudete = new User(5, "Claudete");
+		this.cayley = new User(6, "Cayley");
 	}
 	
 	@BeforeClass
@@ -81,10 +82,10 @@ public class AuctionHouseTest {
 	public void verifyBiggerThreeBids() {
 		AuctionHouse auctionhouse = new AuctionHouseFactory()
 				.createAuction("Playstation 4 Novo")
-				.offer(john, 1500.0)
-				.offer(jose, 1600.0)
-				.offer(mariah, 1700.0)
-				.offer(alex, 1850.0)
+				.offer(john, 1500)
+				.offer(jose, 1600)
+				.offer(mariah, 1700)
+				.offer(alex, 1850)
 				.build();
 
 		appraiser.evaluate(auctionhouse);

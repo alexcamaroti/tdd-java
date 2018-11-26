@@ -1,6 +1,7 @@
 package br.com.camaroti.alex.tdd.auctionhouse.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import br.com.camaroti.alex.tdd.auctionhouse.model.Bid;
@@ -13,9 +14,19 @@ import lombok.NonNull;
 @Data 
 public class AuctionHouse {
 
+	private Calendar date;
 	@NonNull private String description;
 	private List<Bid> bids;
+	private boolean finished;
+	private int id;
 	
+	
+
+	public AuctionHouse(String description, Calendar date) {
+		super();
+		this.date = date;
+		this.description = description;
+	}
 	
 	
 	public void offer(Bid bid) {		
@@ -61,4 +72,9 @@ public class AuctionHouse {
 		return getLastBid().getValue() * 2;
 	}
 	
+	
+	public void finish() {
+		this.finished = true;
+	}
+
 }

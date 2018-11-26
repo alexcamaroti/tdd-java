@@ -1,4 +1,4 @@
-package auctionhouse;
+package br.com.camaroti.alex.tdd.auctionhouse.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

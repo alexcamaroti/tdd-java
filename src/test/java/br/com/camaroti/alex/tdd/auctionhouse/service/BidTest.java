@@ -1,4 +1,4 @@
-package auctionhouse;
+package br.com.camaroti.alex.tdd.auctionhouse.service;
 
 import org.junit.Before;
 import org.junit.Test;
