@@ -8,13 +8,15 @@ import br.com.camaroti.alex.tdd.auctionhouse.dao.IAuctionHouseDAO;
 public class AuctionCloser {
 
 	private IAuctionHouseDAO dao;
+	private final IEmailSender postman;
+	private int total = 0;
 	
-	public AuctionCloser(IAuctionHouseDAO dao) {
+	public AuctionCloser(IAuctionHouseDAO dao, IEmailSender postman) {
 		this.dao = dao;
+		this.postman = postman;
 	}
 	
 	
-	private int total = 0;
 
 	public void close() {
 		List<AuctionHouse> allCurrentAuctions = dao.activeAuctions();
@@ -24,6 +26,7 @@ public class AuctionCloser {
 				ah.finish();
 				total++;
 				dao.update(ah);
+				postman.send(ah);
 			}
 		}
 	}
