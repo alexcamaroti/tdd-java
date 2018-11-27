@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import br.com.camaroti.alex.tdd.auctionhouse.dao.IAuctionHouseDAO;
+import br.com.camaroti.alex.tdd.auctionhouse.email.IEmailSender;
 
 public class AuctionCloser {
 

@@ -21,6 +21,7 @@ import org.mockito.InOrder;
 
 import br.com.camaroti.alex.tdd.auctionhouse.builder.AuctionHouseFactory;
 import br.com.camaroti.alex.tdd.auctionhouse.dao.IAuctionHouseDAO;
+import br.com.camaroti.alex.tdd.auctionhouse.email.IEmailSender;
 
 public class AuctionCloserTest {
 
