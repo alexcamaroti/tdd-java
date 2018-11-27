@@ -26,6 +26,7 @@ public class AuctionHouse {
 		super();
 		this.date = date;
 		this.description = description;
+		this.bids = new ArrayList<Bid>();
 	}
 	
 	
