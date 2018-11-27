@@ -39,8 +39,8 @@ public class AuctionHouseFactory {
 	}
 
 	public AuctionHouse build() {
-		AuctionHouse ah = new AuctionHouse(description, date);
-		for (Bid bid : bids) {
+		AuctionHouse ah = new AuctionHouse(this.description, this.date);
+		for (Bid bid : auctionHouse.getBids()) {
 			ah.offer(bid);
 		}
 		return ah;
