@@ -23,11 +23,15 @@ public class AuctionCloser {
 		List<AuctionHouse> allCurrentAuctions = dao.activeAuctions();
 
 		for (AuctionHouse ah : allCurrentAuctions) {
-			if (startedLastWeek(ah)) {
-				ah.finish();
-				total++;
-				dao.update(ah);
-				postman.send(ah);
+			try {
+				if (startedLastWeek(ah)) {
+					ah.finish();
+					total++;
+					dao.update(ah);
+					postman.send(ah);
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
 			}
 		}
 	}

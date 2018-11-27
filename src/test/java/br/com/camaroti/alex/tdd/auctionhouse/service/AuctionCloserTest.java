@@ -9,6 +9,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.doThrow;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -136,6 +137,25 @@ public class AuctionCloserTest {
 		InOrder inOrder = inOrder(daoFake, postmanFake);
 		inOrder.verify(daoFake, times(1)).update(ah1);
 		inOrder.verify(postmanFake, times(1)).send(ah1);
+	}
+	
+	@Test
+	public void continueExecutionEvenIfItFails() {
+		AuctionHouse ah1 = ahf1.onDate(oldDate).build();
+		AuctionHouse ah2 = ahf2.onDate(oldDate).build();
+		
+		when(daoFake.activeAuctions()).thenReturn(Arrays.asList(ah1, ah2));
+		doThrow(new RuntimeException()).when(daoFake).update(ah1);
+
+		AuctionCloser ahCloser = new AuctionCloser(daoFake, postmanFake);
+		ahCloser.close();
+		
+		
+		verify(daoFake).update(ah1);
+		verify(postmanFake).send(ah2);
+		
+		verify(postmanFake, times(0)).send(ah1);
+		
 	}
 	
 	
