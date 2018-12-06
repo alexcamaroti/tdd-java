@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Matchers.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,6 +20,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
+import org.mockito.Matchers;
 
 import br.com.camaroti.alex.tdd.auctionhouse.builder.AuctionHouseFactory;
 import br.com.camaroti.alex.tdd.auctionhouse.dao.IAuctionHouseDAO;
@@ -155,6 +157,23 @@ public class AuctionCloserTest {
 		verify(postmanFake).send(ah2);
 		
 		verify(postmanFake, times(0)).send(ah1);
+		
+	}
+	
+	@Test
+	public void postmanNeverInvokedIfAllExceptionsAreActivated() {
+		AuctionHouse ah1 = ahf1.onDate(oldDate).build();
+		AuctionHouse ah2 = ahf2.onDate(oldDate).build();
+		AuctionHouse ah3 = ahf3.onDate(oldDate).build();
+		
+		when(daoFake.activeAuctions()).thenReturn(Arrays.asList(ah1, ah2, ah3));
+		doThrow(new RuntimeException()).when(daoFake).update(any(AuctionHouse.class));
+		AuctionCloser ahCloser = new AuctionCloser(daoFake, postmanFake);
+		ahCloser.close();
+		
+		verify(postmanFake, never()).send(ah1);
+		verify(postmanFake, never()).send(ah2);
+		verify(postmanFake, never()).send(ah3);
 		
 	}
 	
