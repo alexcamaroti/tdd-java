@@ -1,14 +1,16 @@
 package br.com.camaroti.alex.tdd.auctionhouse.service;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Calendar;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
 import br.com.camaroti.alex.tdd.auctionhouse.builder.AuctionHouseFactory;
 import br.com.camaroti.alex.tdd.auctionhouse.dao.AuctionHouseDAO;
@@ -20,7 +22,7 @@ import br.com.camaroti.alex.tdd.auctionhouse.model.User;
 public class PaymentServiceTest {
 
 	
-	private Appraiser appraiserMock;
+	private Appraiser appraiser;
 	private AuctionHouseDAO autionMock;
 	private IPaymentDAO paymentMock;
 	private AuctionHouseFactory ahf1;
@@ -39,8 +41,7 @@ public class PaymentServiceTest {
 	public void setUp() {
 		paymentMock = mock(IPaymentDAO.class);
 		autionMock = mock(AuctionHouseDAO.class);
-		appraiserMock = mock(Appraiser.class);
-		
+		appraiser = new Appraiser();
 		ahf1 = new AuctionHouseFactory().createAuction("4K Ultra HD TV 55 pol LG");
 		ahf2 = new AuctionHouseFactory().createAuction("Refrigerator Consul");
 		ahf3 = new AuctionHouseFactory().createAuction("Nintendo switch 32GB Gray");
@@ -66,9 +67,10 @@ public class PaymentServiceTest {
 								.offer(cayley, 2500).onDate(oldDate).build();
 		
 		when(autionMock.closedAuctions()).thenReturn(Arrays.asList(ah1));
-		when(appraiserMock.getBiggestBid()).thenReturn(2500.0);
 		
-		PaymentService paymentService = new PaymentService(autionMock, appraiserMock, paymentMock);
+		appraiser.evaluate(ah1);
+		
+		PaymentService paymentService = new PaymentService(autionMock, appraiser, paymentMock);
 		paymentService.gera();
 		
 		ArgumentCaptor<Payment> argument = ArgumentCaptor.forClass(Payment.class);
